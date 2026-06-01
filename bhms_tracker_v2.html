@@ -1,0 +1,613 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0f1117;--bg2:#1a1d27;--bg3:#22263a;--card:#1e2235;--border:#2e3450;--acc:#4f8ef7;--grn:#38c9a0;--warn:#f7c948;--red:#f75f5f;--txt:#e8eaf6;--txt2:#8b90b0;--txt3:#5a5f80;--r:10px}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+.hidden{display:none!important}
+input,select,textarea{background:var(--bg3);border:1px solid var(--border);color:var(--txt);border-radius:var(--r);padding:9px 12px;font-size:13px;outline:none;font-family:inherit}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+select option{background:var(--bg3);color:var(--txt)}
+button{cursor:pointer;font-family:inherit}
+
+#login-pg{display:flex;align-items:center;justify-content:center;min-height:100vh;background:radial-gradient(ellipse at 60% 40%,#1a2a4a 0%,#0f1117 70%)}
+.lbox{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 44px;width:380px}
+.llogo{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.llogo .icon{width:38px;height:38px;background:var(--acc);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.llogo .brand{font-size:17px;font-weight:700;letter-spacing:.3px}
+.llogo .brand span{color:var(--acc)}
+.lbox h2{font-size:21px;font-weight:600;margin-bottom:5px}
+.lbox p{color:var(--txt2);font-size:13px;margin-bottom:24px}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:11px;color:var(--txt2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.fg input{width:100%}
+.fg .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-primary{width:100%;background:var(--acc);border:none;border-radius:var(--r);padding:11px;color:#fff;font-size:14px;font-weight:600;margin-top:6px}
+.btn-primary:hover{opacity:.88}
+.lerr{color:var(--red);font-size:12px;text-align:center;margin-top:8px;min-height:18px}
+
+#app{display:none;flex-direction:column;min-height:100vh}
+header{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;height:56px;gap:12px;position:sticky;top:0;z-index:100}
+.hlogo{font-size:14px;font-weight:700;flex:1}.hlogo span{color:var(--acc)}
+nav{display:flex;gap:3px}
+.nb{background:none;border:none;color:var(--txt2);font-size:12px;padding:6px 14px;border-radius:8px;font-weight:500;transition:all .15s}
+.nb.active,.nb:hover{background:var(--bg3);color:var(--txt)}
+.huser{display:flex;align-items:center;gap:8px}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.hname{font-size:13px;color:var(--txt2)}
+.btn-out{background:none;border:1px solid var(--border);color:var(--txt2);font-size:11px;padding:4px 10px;border-radius:7px}
+.btn-out:hover{border-color:var(--red);color:var(--red)}
+
+.pg{display:none;padding:24px;max-width:1200px;margin:0 auto;width:100%}
+.pg.active{display:block}
+.ptitle{font-size:19px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.badge{background:var(--acc);color:#fff;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600}
+
+.tw{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+th{padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--txt2);font-weight:600;background:var(--bg3);white-space:nowrap}
+td{padding:9px 12px;border-top:1px solid var(--border);vertical-align:middle;overflow:hidden;text-overflow:ellipsis}
+tr:hover td{background:rgba(79,142,247,.04)}
+.co{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.co-M{background:rgba(79,142,247,.15);color:#7db3ff}
+.co-H{background:rgba(247,201,72,.15);color:#f7c948}
+.co-V{background:rgba(56,201,160,.15);color:#38c9a0}
+.co-C{background:rgba(247,95,95,.15);color:#f75f5f}
+.co-B{background:rgba(180,120,247,.15);color:#c47ff7}
+.st-open{background:rgba(247,201,72,.15);color:#f7c948;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.st-closed{background:rgba(56,201,160,.15);color:#38c9a0;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+
+.arow{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.arow label{font-size:12px;color:var(--txt2)}
+.sel{min-width:240px}
+.btn-sec{background:none;border:1px solid var(--border);color:var(--txt2);font-size:12px;padding:8px 16px;border-radius:var(--r);font-weight:500}
+.btn-sec:hover{border-color:var(--acc);color:var(--acc)}
+.btn-grn{background:var(--grn);border:none;color:#0a1a14;font-size:12px;font-weight:700;padding:8px 18px;border-radius:var(--r)}
+.btn-grn:hover{opacity:.88}
+.btn-grn:disabled{opacity:.4;cursor:not-allowed}
+
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.ii label{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px}
+.ii span{font-size:13px;font-weight:600;color:var(--txt)}
+.status-sel{background:var(--bg3);border:1px solid var(--border);color:var(--txt);padding:5px 10px;border-radius:8px;font-size:12px}
+
+.acard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:10px}
+.ahead{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.anum{width:24px;height:24px;background:var(--bg3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--acc);flex-shrink:0}
+.aname{font-size:14px;font-weight:600;flex:1}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--txt3)}
+.dot.done{background:var(--grn)}
+.dot.partial{background:var(--warn)}
+.actls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.yng{display:flex;gap:5px}
+.yn{background:var(--bg3);border:1px solid var(--border);color:var(--txt2);padding:6px 16px;border-radius:8px;font-size:12px;font-weight:500}
+.yn.yes.on{background:rgba(56,201,160,.2);border-color:var(--grn);color:var(--grn)}
+.yn.no.on{background:rgba(247,95,95,.15);border-color:var(--red);color:var(--red)}
+.cinput{background:var(--bg3);border:1px solid var(--border);color:var(--txt);padding:6px 10px;border-radius:8px;font-size:12px;width:72px;text-align:center}
+.cinput:focus{border-color:var(--acc)}
+.clabel{font-size:12px;color:var(--txt2)}
+.cmax{font-size:11px;color:var(--txt3)}
+.anote{width:100%;margin-top:8px;background:var(--bg3);border:1px solid var(--border);color:var(--txt);padding:7px 11px;border-radius:8px;font-size:12px;resize:vertical;min-height:42px}
+.srow{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;align-items:center}
+.btn-save{background:var(--acc);border:none;color:#fff;font-size:13px;font-weight:600;padding:9px 24px;border-radius:var(--r)}
+.btn-save:hover{opacity:.88}
+.smsg{font-size:12px;color:var(--grn);display:none}
+
+.wfilter{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.wfilter label{font-size:12px;color:var(--txt2)}
+.wfilter select{min-width:160px;font-size:12px;padding:7px 10px}
+.wfilter input{font-size:12px;padding:7px 10px;min-width:130px}
+.wcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.wcard-hdr{background:var(--bg3);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.wcard-hdr:hover{background:var(--bg2)}
+.wperson{font-size:14px;font-weight:700;color:var(--txt);flex:1}
+.wpo{font-size:12px;color:var(--acc)}
+.wdate{font-size:11px;color:var(--txt3)}
+.wchev{font-size:14px;color:var(--txt3);transition:transform .2s}
+.wchev.open{transform:rotate(180deg)}
+.wbody{display:none;padding:14px 16px}
+.wbody.open{display:block}
+.wday-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.wday-label{font-size:13px;font-weight:600;color:var(--acc)}
+.wday-by{font-size:11px;color:var(--txt2)}
+.wact-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:10px}
+.wact-item{background:var(--bg3);border-radius:8px;padding:8px 12px}
+.wact-name{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.wact-val{font-size:12px;font-weight:600}
+.wact-val.yes{color:var(--grn)}
+.wact-val.no{color:var(--red)}
+.wact-val.num{color:var(--warn)}
+.wnote{font-size:11px;color:var(--txt2);margin-top:4px;font-style:italic}
+.wcomp{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;background:rgba(56,201,160,.15);color:var(--grn)}
+.wday-sep{border-top:1px solid var(--border);margin:12px 0}
+.empty-msg{text-align:center;color:var(--txt2);padding:48px 0;font-size:14px}
+</style>
+
+<div id="login-pg">
+  <div class="lbox">
+    <div class="llogo"><div class="icon">⚡</div><div class="brand">BHMS <span>Tracker</span></div></div>
+    <h2>Sign in</h2>
+    <p>Battery Health Monitoring System — Installation Portal</p>
+    <div class="fg"><label>Your Name</label><input id="li-name" placeholder="Enter your full name" /></div>
+    <div class="fg"><label>Credentials</label>
+      <div class="row2">
+        <input id="li-user" placeholder="Username" />
+        <input id="li-pass" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Sign In</button>
+    <div class="lerr" id="lerr"></div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <div class="hlogo">BHMS <span>Tracker</span></div>
+    <nav>
+      <button class="nb active" id="nav-orders" onclick="showPage('orders')">📋 Orders</button>
+      <button class="nb" id="nav-act" onclick="showPage('act')">⚙️ Activities</button>
+      <button class="nb" id="nav-work" onclick="showPage('work')">📁 Work Log</button>
+    </nav>
+    <div class="huser">
+      <div class="avatar" id="h-av">A</div>
+      <div class="hname" id="h-nm">Admin</div>
+      <button class="btn-out" onclick="doLogout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="pg active" id="pg-orders">
+    <div class="ptitle">Purchase Orders <span class="badge" id="pocnt">26</span></div>
+    <div class="tw">
+      <table>
+        <colgroup>
+          <col style="width:30px"><col style="width:90px"><col style="width:160px"><col style="width:90px">
+          <col style="width:240px"><col style="width:55px"><col style="width:45px"><col style="width:60px">
+          <col style="width:90px"><col style="width:80px">
+        </colgroup>
+        <thead><tr>
+          <th>#</th><th>Date</th><th>PO Number</th><th>Company</th>
+          <th>Description</th><th>Cells</th><th>Sets</th><th>Total</th>
+          <th>Status</th><th>Progress</th>
+        </tr></thead>
+        <tbody id="otbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="pg" id="pg-act">
+    <div class="ptitle">Installation Activities</div>
+    <div class="arow">
+      <label>Select Order:</label>
+      <select class="sel" id="po-sel" onchange="loadAct()"><option value="">-- Choose PO --</option></select>
+      <div class="fg" style="margin:0;display:flex;align-items:center;gap:8px">
+        <label style="font-size:12px;color:var(--txt2)">Work Date:</label>
+        <input type="date" id="work-date" style="padding:7px 10px;font-size:12px" />
+      </div>
+      <button class="btn-grn" id="btn-pdf" onclick="genPDF()" disabled>📄 Export PDF</button>
+    </div>
+    <div id="act-wrap" class="hidden">
+      <div class="info-card" id="act-info"></div>
+      <div id="act-grid"></div>
+      <div class="srow">
+        <div class="smsg" id="smsg">✅ Log saved to Work page!</div>
+        <button class="btn-save" onclick="saveLog()">Save Log</button>
+      </div>
+    </div>
+    <div id="act-empty" style="color:var(--txt2);text-align:center;padding:60px 0;font-size:14px">Select a PO order above to begin</div>
+  </div>
+
+  <div class="pg" id="pg-work">
+    <div class="ptitle">Work Log</div>
+    <div class="wfilter">
+      <label>Filter by person:</label>
+      <select id="flt-person" onchange="renderWork()"><option value="">All</option></select>
+      <label>Filter by PO:</label>
+      <select id="flt-po" onchange="renderWork()"><option value="">All</option></select>
+      <input id="flt-date" type="date" onchange="renderWork()" style="font-size:12px;padding:7px 10px" />
+      <button class="btn-sec" onclick="clearFilters()">Clear filters</button>
+    </div>
+    <div id="work-list"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const POS=[
+  {id:1,date:"14/10/2023",poNum:"MTW-6434/23-24_21659",company:"Masstech",desc:"Battery cell voltage detector 110V (BHMS) 90 Cells",cells:90,sets:14,total:1260},
+  {id:2,date:"14/10/2023",poNum:"MTW-6289/23-24_21588",company:"Masstech",desc:"Battery cell voltage detector 110V BHMS 91 Cells",cells:91,sets:2,total:182},
+  {id:3,date:"14/10/2023",poNum:"MTW_Internal_/23-24-21660",company:"Masstech",desc:"Battery cell voltage detector 110V BHMS 54 Cells LA Type",cells:54,sets:1,total:54},
+  {id:4,date:"01/03/2024",poNum:"MTW/23-24_22532",company:"Masstech",desc:"Battery cell voltage detector 220V (BHMS) 180 cells",cells:180,sets:2,total:360},
+  {id:5,date:"08/05/2024",poNum:"MTW-6448/24-25_22924-90V",company:"Masstech",desc:"Battery cell voltage detector 110V (BHMS) 90 cells",cells:90,sets:4,total:360},
+  {id:6,date:"08/05/2024",poNum:"MTW-6448/24-25_22924-180V",company:"Masstech",desc:"Battery cell voltage detector 220V (BHMS) 180 cells",cells:180,sets:2,total:360},
+  {id:7,date:"22/06/2024",poNum:"MTW-6545&6552/24-25_23325",company:"Masstech",desc:"110V/320AH 86 NI-CD BATTERY BHMS 20M CABLE SOSALEY",cells:86,sets:4,total:344},
+  {id:8,date:"27/03/2024",poNum:"PO/SNUP2324/06318",company:"Hitachi",desc:"1.2V BHMS W.O. A-0723-178 296 cells 2 Sets",cells:296,sets:2,total:592},
+  {id:9,date:"29/07/2024",poNum:"P/6439/48700/AXNG006",company:"Hitachi",desc:"1.2V BHMS W.O. A-0823-0264 SOSALEY 284 CELLS x 2 SET",cells:284,sets:2,total:568},
+  {id:10,date:"15/11/2024",poNum:"PO/SNUP2425/03702",company:"Hitachi",desc:"1.2V BHMS W.O. A-1123-0366 SOSALEY 281 Cells Flameproof JB",cells:281,sets:4,total:1124},
+  {id:11,date:"28/04/2025",poNum:"25983",company:"Masstech",desc:"MTW-6832 95 Cells",cells:95,sets:3,total:285},
+  {id:12,date:"28/04/2025",poNum:"25984",company:"Masstech",desc:"MTW-7008 86 Cells",cells:86,sets:6,total:516},
+  {id:13,date:"20/05/2025",poNum:"PO/SNUP2526/00926",company:"Hitachi",desc:"BHMS 1.2V 770AH 282 CELLS W.O.A-0225-0543",cells:282,sets:2,total:564},
+  {id:14,date:"20/05/2025",poNum:"PO/SNUP2526/00924",company:"Hitachi",desc:"BHMS 1.2V 220AH 86 CELLS W.O.A-0125-0510",cells:86,sets:2,total:172},
+  {id:15,date:"29/05/2025",poNum:"PO/SNUP2526/01045",company:"Hitachi",desc:"BHMS 1.2V 723AH 277 CELLS W.O. A-1224-0419",cells:277,sets:2,total:554},
+  {id:16,date:"05/08/2025",poNum:"MTW-7191/25-26_26746",company:"Masstech",desc:"BHMS 87 Cells 4 Sets",cells:87,sets:4,total:348},
+  {id:17,date:"03/07/2025",poNum:"MTW-7077/25-26_26677",company:"Masstech",desc:"89 Cells 4 Sets 20M Cable Module BHMS 90S",cells:89,sets:4,total:356},
+  {id:18,date:"21/08/2025",poNum:"VC/25-26/1177",company:"Valay Controls",desc:"BHMS 1.2V 175 Cells x 2 Sets 90S Panel",cells:175,sets:2,total:350},
+  {id:19,date:"30/10/2025",poNum:"MTW-7248/25-26_27376",company:"Masstech",desc:"BHMS 1.2V 87 Cells 2 Sets 5M Cable 15S",cells:87,sets:2,total:174},
+  {id:20,date:"30/09/2025",poNum:"VC/25-26/1576_R1",company:"Valay Controls",desc:"BHMS 1.2V 86 Cells x 4 Sets 90S Panel",cells:86,sets:4,total:344},
+  {id:21,date:"31/10/2025",poNum:"VC/25-26/1580-90C",company:"Valay Controls",desc:"BHMS 1.2V 90 Cells x 2 Sets 90S Panel",cells:90,sets:2,total:180},
+  {id:22,date:"31/10/2025",poNum:"VC/25-26/1580-169C",company:"Valay Controls",desc:"BHMS 1.2V 169 Cells x 2 Sets 90S Panel",cells:169,sets:2,total:338},
+  {id:23,date:"30/09/2025",poNum:"VC/25-26/1579",company:"Valay Controls",desc:"BHMS 1.2V 90 Cells x 2 Sets 90S Panel",cells:90,sets:2,total:180},
+  {id:24,date:"31/10/2025",poNum:"VC/25-26/1578_R1",company:"Valay Controls",desc:"BHMS 1.2V 90 Cells x 2 Sets 90S Panel",cells:90,sets:2,total:180},
+  {id:25,date:"NA",poNum:"10M179",company:"Chhabi",desc:"BHMS 1.2V 86 Cells x 2 Sets 15S Slave",cells:86,sets:2,total:172},
+  {id:26,date:"20/11/2024",poNum:"23093208",company:"BSES Yamuna",desc:"BHMS 1.2V 38 Cells x 1 Sets 15S Slave",cells:38,sets:1,total:38}
+];
+
+const ACTS=[
+  {k:"material",n:"Material Availability",t:"yn"},
+  {k:"ulug",n:"U Lug Fixing",t:"count"},
+  {k:"cableduct",n:"Cable Duct Fixing",t:"count"},
+  {k:"panel",n:"Fixing Panel & JB",t:"yn"},
+  {k:"cablelaying",n:"Cable Laying",t:"yn"},
+  {k:"dressing",n:"Dressing",t:"rows"},
+  {k:"demo",n:"Demo",t:"yn"}
+];
+
+let workLogs=[];
+let poStatus={};
+let curUser='',curUserName='';
+let curData={};
+
+function coCls(c){return{Masstech:'M',Hitachi:'H','Valay Controls':'V',Chhabi:'C','BSES Yamuna':'B'}[c]||'M'}
+
+function calcScore(data,po){
+  if(!data||!po)return 0;
+  let d=0;
+  ACTS.forEach(a=>{
+    const v=data[a.k];
+    if(a.t==='yn'){if(v==='yes')d++;}
+    else if(v&&parseInt(v)>0)d++;
+  });
+  return Math.round((d/ACTS.length)*100);
+}
+
+function getPOLogs(pid){return workLogs.filter(l=>l.poId===pid)}
+
+function getStatus(pid){
+  if(poStatus[pid]==='closed')return'<span class="st-closed">Closed</span>';
+  const logs=getPOLogs(pid);
+  if(logs.length>0)return'<span class="st-open">Open</span>';
+  return'<span style="color:var(--txt3);font-size:11px;">Not started</span>';
+}
+
+function renderOrders(){
+  const tb=document.getElementById('otbody');
+  tb.innerHTML=POS.map((po,i)=>{
+    const logs=getPOLogs(po.id);
+    const lastLog=logs[logs.length-1];
+    const score=lastLog?calcScore(lastLog.data,po):0;
+    return`<tr>
+      <td style="color:var(--txt3)">${i+1}</td>
+      <td style="color:var(--txt2);font-size:11px">${po.date}</td>
+      <td style="font-size:11px;font-weight:600;color:var(--acc)">${po.poNum}</td>
+      <td><span class="co co-${coCls(po.company)}">${po.company}</span></td>
+      <td style="color:var(--txt2);font-size:11px">${po.desc}</td>
+      <td style="font-weight:600">${po.cells}</td>
+      <td>${po.sets}</td>
+      <td style="font-weight:700;color:var(--grn)">${po.total.toLocaleString()}</td>
+      <td>${getStatus(po.id)}</td>
+      <td style="color:${score>=100?'var(--grn)':score>0?'var(--warn)':'var(--txt3)'};font-weight:600;font-size:12px">${score>0?score+'%':'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function populateSel(){
+  const sel=document.getElementById('po-sel');
+  sel.innerHTML='<option value="">-- Choose PO Order --</option>'+
+    POS.map(p=>`<option value="${p.id}">${p.poNum} | ${p.company} | ${p.cells}C x ${p.sets}S</option>`).join('');
+}
+
+function loadAct(){
+  const id=parseInt(document.getElementById('po-sel').value);
+  const btnPdf=document.getElementById('btn-pdf');
+  if(!id){
+    document.getElementById('act-wrap').classList.add('hidden');
+    document.getElementById('act-empty').style.display='block';
+    btnPdf.disabled=true;
+    curData={};
+    return;
+  }
+  const po=POS.find(p=>p.id===id);
+  document.getElementById('act-empty').style.display='none';
+  document.getElementById('act-wrap').classList.remove('hidden');
+  btnPdf.disabled=false;
+
+  const today=new Date().toISOString().split('T')[0];
+  if(!document.getElementById('work-date').value)
+    document.getElementById('work-date').value=today;
+
+  curData={};
+  const logs=getPOLogs(id);
+  if(logs.length>0){
+    const last=logs[logs.length-1];
+    curData=Object.assign({},last.data);
+  }
+
+  document.getElementById('act-info').innerHTML=`
+    <div class="ii"><label>PO Number</label><span>${po.poNum}</span></div>
+    <div class="ii"><label>Company</label><span>${po.company}</span></div>
+    <div class="ii"><label>Cells</label><span>${po.cells}</span></div>
+    <div class="ii"><label>Sets</label><span>${po.sets}</span></div>
+    <div class="ii"><label>Total</label><span>${po.total}</span></div>
+    <div class="ii"><label>Installation Status</label>
+      <select class="status-sel" id="po-status-sel" onchange="setPoStatus(${id},this.value)">
+        <option value="open" ${(poStatus[id]||'open')==='open'?'selected':''}>🟡 Open</option>
+        <option value="closed" ${poStatus[id]==='closed'?'selected':''}>🟢 Closed</option>
+      </select>
+    </div>
+  `;
+
+  const grid=document.getElementById('act-grid');
+  grid.innerHTML=ACTS.map((a,i)=>{
+    const v=curData[a.k]||'';
+    const note=curData[a.k+'_note']||'';
+    let ctrl='';
+    if(a.t==='yn'){
+      ctrl=`<div class="yng">
+        <button class="yn yes ${v==='yes'?'on':''}" onclick="setYN('${a.k}','yes',this)">✔ Yes</button>
+        <button class="yn no ${v==='no'?'on':''}" onclick="setYN('${a.k}','no',this)">✗ No</button>
+      </div>`;
+    } else if(a.t==='count'){
+      ctrl=`<div style="display:flex;align-items:center;gap:8px">
+        <span class="clabel">${a.k==='ulug'?'U Lugs':'Ducts'} fixed:</span>
+        <input class="cinput" type="number" min="0" max="${po.total}" value="${v||''}" placeholder="0"
+          oninput="setVal('${a.k}',this.value)" />
+        <span class="cmax">/ ${po.total}</span>
+      </div>`;
+    } else {
+      ctrl=`<div style="display:flex;align-items:center;gap:8px">
+        <span class="clabel">Rows finished:</span>
+        <input class="cinput" type="number" min="0" value="${v||''}" placeholder="0"
+          oninput="setVal('${a.k}',this.value)" />
+      </div>`;
+    }
+    const done=a.t==='yn'?v==='yes':(v&&parseInt(v)>0);
+    return`<div class="acard">
+      <div class="ahead">
+        <div class="anum">${i+1}</div>
+        <div class="aname">${a.n}</div>
+        <div class="dot ${done?'done':''}" id="dot-${a.k}"></div>
+      </div>
+      <div class="actls">${ctrl}</div>
+      <textarea class="anote" placeholder="Notes / remarks..."
+        oninput="setNote('${a.k}',this.value)">${note}</textarea>
+    </div>`;
+  }).join('');
+}
+
+function setPoStatus(id,val){poStatus[id]=val;renderOrders();}
+
+function setYN(k,v,btn){
+  curData[k]=v;
+  const p=btn.closest('.yng');
+  p.querySelectorAll('.yn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const d=document.getElementById('dot-'+k);
+  if(d)d.className='dot'+(v==='yes'?' done':'');
+}
+function setVal(k,v){
+  curData[k]=v;
+  const d=document.getElementById('dot-'+k);
+  if(d)d.className='dot'+(parseInt(v)>0?' done partial':'');
+}
+function setNote(k,v){curData[k+'_note']=v;}
+
+function saveLog(){
+  const id=parseInt(document.getElementById('po-sel').value);
+  if(!id)return;
+  const po=POS.find(p=>p.id===id);
+  const wd=document.getElementById('work-date').value||new Date().toISOString().split('T')[0];
+  const entry={
+    poId:id,poNum:po.poNum,company:po.company,
+    person:curUserName,
+    date:wd,
+    data:Object.assign({},curData),
+    score:calcScore(curData,po)
+  };
+  workLogs.push(entry);
+  renderOrders();
+  renderWork();
+  updateWorkFilters();
+  const msg=document.getElementById('smsg');
+  msg.style.display='block';
+  setTimeout(()=>msg.style.display='none',2500);
+}
+
+function fmt(ds){
+  if(!ds)return'--';
+  const p=ds.split('-');
+  if(p.length===3)return`${p[2]}/${p[1]}/${p[0]}`;
+  return ds;
+}
+
+function actVal(a,data,po){
+  const v=data[a.k]||'';
+  if(a.t==='yn') return{txt:v?v.toUpperCase():'—',cls:v==='yes'?'yes':v==='no'?'no':''};
+  if(v&&parseInt(v)>0){
+    const max=a.t==='count'?(po?po.total:'?'):'';
+    return{txt:v+(max?' / '+max:''),cls:'num'};
+  }
+  return{txt:'—',cls:''};
+}
+
+function renderWork(){
+  const fp=document.getElementById('flt-person').value;
+  const fpo=document.getElementById('flt-po').value;
+  const fd=document.getElementById('flt-date').value;
+  let logs=[...workLogs];
+  if(fp)logs=logs.filter(l=>l.person===fp);
+  if(fpo)logs=logs.filter(l=>l.poId===parseInt(fpo));
+  if(fd)logs=logs.filter(l=>l.date===fd);
+
+  const grouped={};
+  logs.forEach(l=>{
+    const key=`${l.person}||${l.poId}`;
+    if(!grouped[key])grouped[key]={person:l.person,poId:l.poId,poNum:l.poNum,company:l.company,days:[]};
+    grouped[key].days.push(l);
+  });
+
+  const list=document.getElementById('work-list');
+  if(!Object.keys(grouped).length){
+    list.innerHTML='<div class="empty-msg">No work logs yet. Complete activities and save logs to see them here.</div>';
+    return;
+  }
+
+  list.innerHTML=Object.values(grouped).map((g,gi)=>{
+    const po=POS.find(p=>p.id===g.poId);
+    const initials=g.person.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const daysHtml=g.days.map((d,di)=>{
+      const rowHtml=ACTS.map(a=>{
+        const va=actVal(a,d.data,po);
+        const note=d.data[a.k+'_note']||'';
+        return`<div class="wact-item">
+          <div class="wact-name">${a.n}</div>
+          <div class="wact-val ${va.cls}">${va.txt}</div>
+          ${note?`<div class="wnote">${note}</div>`:''}
+        </div>`;
+      }).join('');
+      return`${di>0?'<div class="wday-sep"></div>':''}
+        <div class="wday-hdr">
+          <span class="wday-label">Day ${di+1} — ${fmt(d.date)}</span>
+          <span class="wday-by">by ${d.person}</span>
+          <span class="wcomp" style="margin-left:auto">${d.score}% complete</span>
+        </div>
+        <div class="wact-row">${rowHtml}</div>`;
+    }).join('');
+
+    return`<div class="wcard">
+      <div class="wcard-hdr" onclick="toggleW('wbody-${gi}','chev-${gi}')">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0">${initials}</div>
+        <div style="flex:1;min-width:0">
+          <div class="wperson">${g.person}</div>
+          <div class="wpo">${g.poNum} · ${g.company}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:var(--txt3)">${g.days.length} day${g.days.length>1?'s':''} logged</div>
+          <div class="wdate">${fmt(g.days[0].date)}${g.days.length>1?' → '+fmt(g.days[g.days.length-1].date):''}</div>
+        </div>
+        <div class="wchev" id="chev-${gi}">▼</div>
+      </div>
+      <div class="wbody" id="wbody-${gi}">${daysHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleW(bid,cid){
+  const b=document.getElementById(bid);
+  const c=document.getElementById(cid);
+  const open=b.classList.contains('open');
+  b.classList.toggle('open',!open);
+  if(c)c.classList.toggle('open',!open);
+}
+
+function updateWorkFilters(){
+  const persons=[...new Set(workLogs.map(l=>l.person))];
+  const pos=[...new Set(workLogs.map(l=>l.poId))];
+  const fp=document.getElementById('flt-person');
+  const fv=fp.value;
+  fp.innerHTML='<option value="">All people</option>'+persons.map(p=>`<option value="${p}" ${fv===p?'selected':''}>${p}</option>`).join('');
+  const fpo=document.getElementById('flt-po');
+  const fpov=fpo.value;
+  fpo.innerHTML='<option value="">All POs</option>'+pos.map(id=>{
+    const po=POS.find(p=>p.id===id);
+    return`<option value="${id}" ${fpov==id?'selected':''}>${po?po.poNum:id}</option>`;
+  }).join('');
+}
+
+function clearFilters(){
+  document.getElementById('flt-person').value='';
+  document.getElementById('flt-po').value='';
+  document.getElementById('flt-date').value='';
+  renderWork();
+}
+
+function genPDF(){
+  const id=parseInt(document.getElementById('po-sel').value);
+  if(!id)return;
+  const po=POS.find(p=>p.id===id);
+  const wd=document.getElementById('work-date').value;
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210,M=18;let y=18;
+  doc.setFillColor(15,17,23);doc.rect(0,0,W,30,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(16);doc.setFont('helvetica','bold');
+  doc.text('BHMS Installation Report',M,y+5);
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(140,145,180);
+  doc.text(`Prepared by: ${curUserName} | Date: ${fmt(wd)}`,M,y+12);
+  y=38;
+  doc.setFillColor(30,34,53);doc.roundedRect(M,y,W-2*M,36,3,3,'F');
+  const lbs=['PO Number','Company','PO Date','Cells','Sets','Total'];
+  const vls=[po.poNum,po.company,po.date,String(po.cells),String(po.sets),String(po.total)];
+  const cw=(W-2*M)/3;
+  lbs.forEach((l,i)=>{
+    const cx=M+4+(i%3)*cw,cy=y+6+(Math.floor(i/3)*18);
+    doc.setTextColor(140,145,180);doc.setFontSize(8);doc.text(l.toUpperCase(),cx,cy);
+    doc.setTextColor(230,232,245);doc.setFontSize(10);doc.setFont('helvetica','bold');doc.text(vls[i],cx,cy+6);doc.setFont('helvetica','normal');
+  });
+  y+=44;
+  doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor(79,142,247);
+  doc.text('Activities',M,y);y+=7;
+  ACTS.forEach((a,i)=>{
+    const v=curData[a.k]||'';const note=curData[a.k+'_note']||'';
+    let st='—';let sc=[150,156,175];
+    if(a.t==='yn'){st=v?v.toUpperCase():'—';sc=v==='yes'?[56,201,160]:[247,95,95];}
+    else if(v&&parseInt(v)>0){st=v+(a.t==='count'?' / '+po.total:'');sc=[247,201,72];}
+    if(y>265){doc.addPage();y=20;}
+    doc.setFillColor(30,34,53);doc.roundedRect(M,y,W-2*M,note?22:16,2,2,'F');
+    doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(230,232,245);
+    doc.text(`${i+1}. ${a.n}`,M+4,y+7);
+    doc.setTextColor(sc[0],sc[1],sc[2]);doc.text(st,W-M-4,y+7,{align:'right'});
+    if(note){doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(140,145,180);doc.text('Note: '+note,M+4,y+16,{maxWidth:W-2*M-8});}
+    y+=(note?24:18);
+  });
+  y+=6;const sc2=calcScore(curData,po);
+  doc.setFillColor(22,60,40);doc.roundedRect(M,y,W-2*M,16,3,3,'F');
+  doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(56,201,160);
+  doc.text(`Completion: ${sc2}%`,M+4,y+10);
+  doc.setTextColor(100,150,130);doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text(`Generated: ${new Date().toLocaleString()}`,W-M-4,y+10,{align:'right'});
+  doc.save(`BHMS_${po.poNum.replace(/[^a-zA-Z0-9]/g,'_')}_${wd||'report'}.pdf`);
+}
+
+function doLogin(){
+  const nm=document.getElementById('li-name').value.trim();
+  const u=document.getElementById('li-user').value.trim();
+  const pw=document.getElementById('li-pass').value;
+  if(!nm){document.getElementById('lerr').textContent='Please enter your name';return;}
+  const valid=(u==='admin'&&pw==='admin123')||(u==='sosaley'&&pw==='bhms2024')||(u==='user'&&pw==='user123');
+  if(!valid){document.getElementById('lerr').textContent='Invalid username or password';return;}
+  curUser=u;curUserName=nm;
+  document.getElementById('login-pg').style.display='none';
+  const app=document.getElementById('app');
+  app.style.display='flex';app.style.flexDirection='column';
+  document.getElementById('h-av').textContent=nm.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('h-nm').textContent=nm;
+  renderOrders();populateSel();renderWork();updateWorkFilters();
+}
+
+function doLogout(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-pg').style.display='flex';
+  document.getElementById('li-name').value='';document.getElementById('li-user').value='';document.getElementById('li-pass').value='';
+  curUser='';curUserName='';curData={};
+  document.getElementById('po-sel').value='';
+  document.getElementById('act-wrap').classList.add('hidden');
+  document.getElementById('act-empty').style.display='block';
+}
+
+function showPage(n){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pg-'+n).classList.add('active');
+  document.getElementById('nav-'+n).classList.add('active');
+  if(n==='work'){renderWork();updateWorkFilters();}
+  if(n==='orders')renderOrders();
+}
+</script>
